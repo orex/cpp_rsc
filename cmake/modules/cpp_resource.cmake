@@ -1,5 +1,25 @@
 include(CMakeParseArguments)
 
+function(find_resource_compiler)
+
+  if(NOT (COMMAND cpp_rsc))
+    include(ExternalProject)
+    ExternalProject_Add(cpp_rsc_prj
+                        GIT_REPOSITORY https://github.com/orex/cpp_rsc.git
+                        GIT_TAG master
+                        INSTALL_COMMAND "")
+    
+    
+    get_property(RSC_BIN_FOLDER TARGET cpp_rsc_prj PROPERTY _EP_BINARY_DIR)
+    set_property(GLOBAL PROPERTY CPPRSC_CMD ${RSC_BIN_FOLDER}/src/cpp_rsc)
+    message(STATUS ${RSC_BIN_FOLDER}/src/cpp_rsc)                    
+  else() 
+    set_property(GLOBAL PROPERTY CPPRSC_CMD cpp_rsc)
+  endif()
+
+   
+endfunction(find_resource_compiler)                        
+
 function(add_resource name)
 
   set(oneValueArgs OUTPUT RC_WORK_DIR SUFFIX_HEAD SUFFIX_SRC NAMESPACE DATA_WIDTH)
@@ -49,8 +69,18 @@ function(add_resource name)
 
   message(STATUS ${RSC_OUT_H})
   
+  get_property(CMDRSC GLOBAL PROPERTY CPPRSC_CMD)
+  if("${CMDRSC}" STREQUAL "")
+    unset(CMDRSC)
+    set(CMDRSC "cpp_rsc")
+  endif()
+  
+  if(TARGET cpp_rsc_prj)
+    add_dependencies(${name} cpp_rsc_prj)
+  endif()
+  
   add_custom_command(OUTPUT ${RSC_OUT_H} ${RSC_OUT_CPP}
-                     COMMAND cpp_rsc ${RSC_FILE_NAME}
+                     COMMAND ${CMDRSC} ${RSC_FILE_NAME}
                      DEPENDS ${RSC_FILE_NAME})
   
 endfunction(add_resource name)
@@ -67,9 +97,6 @@ function(link_resource_file name)
   file(APPEND ${RSC_FILE_NAME} "file-path=${ARL_FILE}\n")
   file(APPEND ${RSC_FILE_NAME} "var-name=${ARL_VARIABLE}\n")  
   file(APPEND ${RSC_FILE_NAME} "text-file=${ARL_TEXT}\n\n")
-  
-  #add_custom_target(fake_rsc_targ_${ARL_VARIABLE} DEPENDS ${ARL_FILE})
-  #add_dependencies(${name} fake_rsc_targ_${ARL_VARIABLE})
   
   set_source_files_properties(${RSC_FILE_NAME} PROPERTIES OBJECT_DEPENDS ${ARL_FILE})  
 

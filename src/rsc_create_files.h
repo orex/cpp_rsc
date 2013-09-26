@@ -133,7 +133,7 @@ void rsc_create_files::write_variable_def(std::ostream &os, const rsc_item &item
 {
   using namespace std;
   os << "  /* Variable " + item.var_name + " from file " + item.file_path + " */\n" +
-        "  " + (header ? "extern ": "") + "unsigned char " + item.var_name + "[]" + (header ? ";": " = ")
+        "  " + (header ? "extern ": "") + "const char " + item.var_name + "[]" + (header ? ";": " = ")
      << endl;
   
   if(header)
