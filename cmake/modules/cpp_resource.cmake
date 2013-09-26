@@ -45,6 +45,7 @@ function(add_resource name)
   set_property(TARGET ${name} PROPERTY _AR_RSC_FILE ${RSC_FILE_NAME})
   set_property(TARGET ${name} PROPERTY _AR_H_FILE   ${RSC_OUT_H})
   set_property(TARGET ${name} PROPERTY _AR_SRC_FILE ${RSC_OUT_CPP})
+  set_property(TARGET ${name} PROPERTY _AR_H_DIR ${CMAKE_CURRENT_BINARY_DIR})  
 
   message(STATUS ${RSC_OUT_H})
   
