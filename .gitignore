@@ -1,3 +1,7 @@
+build/
+nbproject/
+tmp/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -11,3 +15,7 @@
 *.lai
 *.la
 *.a
+
+# Backup files
+*.backup
+*.*~
