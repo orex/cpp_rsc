@@ -55,29 +55,35 @@ protected:
   bool parse_sec_file(rsc_item &item, const std::string &name, const std::string &val);
 public:
   bool parse(std::string rsc_file_name_v, const std::map<std::string, std::string> &map_opt);
+  static std::string get_file_name(const std::string &full_file_name);
 private:
 
 };
 
-bool rsc_file_parse::parse(std::string rsc_file_name_v, const std::map<std::string,std::string> &map_opt)
+std::string rsc_file_parse::get_file_name(const std::string &full_file_name)
 {
-  rsc_file_name = rsc_file_name_v;
-  
-  int pos_dot   = rsc_file_name.size();
+  int pos_dot   = full_file_name.size();
   int pos_slash = -1;  
-  for(int i = rsc_file_name.size() - 1; i >= 0; i-- )
+  for(int i = full_file_name.size() - 1; i >= 0; i-- )
   {
-    if( (rsc_file_name[i] == '.') && (pos_dot == rsc_file_name.size()) )
+    if( (full_file_name[i] == '.') && (pos_dot == full_file_name.size()) )
     {
       pos_dot = i;
-    } else if( (rsc_file_name[i] == '/') || (rsc_file_name[i] == '\\') )
+    } else if( (full_file_name[i] == '/') || (full_file_name[i] == '\\') )
     {
       pos_slash = i;
       break;
     }  
   }  
   
-  output_file_name = rsc_file_name.substr(pos_slash + 1, pos_dot - pos_slash - 1);
+  return full_file_name.substr(pos_slash + 1, pos_dot - pos_slash - 1);
+}
+
+bool rsc_file_parse::parse(std::string rsc_file_name_v, const std::map<std::string,std::string> &map_opt)
+{
+  rsc_file_name = rsc_file_name_v;
+
+  output_file_name = get_file_name(rsc_file_name);
   
   base_path = "";
   suffix_header = "h";

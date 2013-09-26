@@ -12,7 +12,6 @@ function(find_resource_compiler)
     
     get_property(RSC_BIN_FOLDER TARGET cpp_rsc_prj PROPERTY _EP_BINARY_DIR)
     set_property(GLOBAL PROPERTY CPPRSC_CMD ${RSC_BIN_FOLDER}/src/cpp_rsc)
-    message(STATUS ${RSC_BIN_FOLDER}/src/cpp_rsc)                    
   else() 
     set_property(GLOBAL PROPERTY CPPRSC_CMD cpp_rsc)
   endif()
@@ -67,8 +66,6 @@ function(add_resource name)
   set_property(TARGET ${name} PROPERTY _AR_SRC_FILE ${RSC_OUT_CPP})
   set_property(TARGET ${name} PROPERTY _AR_H_DIR ${CMAKE_CURRENT_BINARY_DIR})  
 
-  message(STATUS ${RSC_OUT_H})
-  
   get_property(CMDRSC GLOBAL PROPERTY CPPRSC_CMD)
   if("${CMDRSC}" STREQUAL "")
     unset(CMDRSC)
