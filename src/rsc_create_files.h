@@ -29,7 +29,7 @@ protected:
   void begin_header_protection(std::ostream &os, const std::string &name);
   void end_header_protection(std::ostream &os, const std::string &name);
   
-  void write_variable_def(std::ostream &os, const rsc_item &item, bool header);
+  void write_variable_def(std::ostream &os, const rsc_item &item, bool header, bool text);
   
   void write_hex_data(std::istream &is, std::ostream &os, bool text, int &size);
   
@@ -83,7 +83,7 @@ bool rsc_create_files::create_header()
   
   for(int i = 0; i < rsfp->items.size(); i++)
   {  
-    write_variable_def(f_out, rsfp->items[i], true);
+    write_variable_def(f_out, rsfp->items[i], true, rsfp->items[i].text_data);
     f_out << endl;
   }  
  
@@ -108,7 +108,7 @@ bool rsc_create_files::create_src()
   
   for(int i = 0; i < rsfp->items.size(); i++)
   {  
-    write_variable_def(f_out, rsfp->items[i], false);
+    write_variable_def(f_out, rsfp->items[i], false, rsfp->items[i].text_data);
     f_out << "  {" << endl;
     
     std::string in_f_name = rsfp->base_path + "/" + rsfp->items[i].file_path;
@@ -129,11 +129,11 @@ bool rsc_create_files::create_src()
   return true;
 }
 
-void rsc_create_files::write_variable_def(std::ostream &os, const rsc_item &item, bool header)
+void rsc_create_files::write_variable_def(std::ostream &os, const rsc_item &item, bool header, bool text)
 {
   using namespace std;
   os << "  /* Variable " + item.var_name + " from file " + item.file_path + " */\n" +
-        "  " + (header ? "extern ": "") + "const char " + item.var_name + "[]" + (header ? ";": " = ")
+        "  " + (header ? "extern ": "") + (text ? "const char " : "const unsigned char ") + item.var_name + "[]" + (header ? ";": " = ")
      << endl;
   
   if(header)
