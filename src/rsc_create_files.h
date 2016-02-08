@@ -10,6 +10,7 @@
 
 #include "rsc_file_parse.h"
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <algorithm>
 #include <map>
@@ -146,8 +147,8 @@ void rsc_create_files::write_variable_def(std::ostream &os, const rsc_item &item
 void rsc_create_files::write_hex_data(std::istream &is, std::ostream &os, bool text, int &size)
 {
   using namespace std;
-  char c;
-  char buf[10];
+  int sm;
+  std::stringstream ts;
   
   std::string line = "  ";
   
@@ -155,13 +156,15 @@ void rsc_create_files::write_hex_data(std::istream &is, std::ostream &os, bool t
   
   while(!is.eof())  
   {
-    is.get(c);
+    sm = is.get();
     std::string curr_item;
+    ts.str("");
+    ts << std::hex;
     
     if(!is.eof())
     {  
-      sprintf(buf, "%hhx", c);
-      curr_item = buf;
+      ts << sm;
+      curr_item = ts.str();
       if(curr_item.size() == 1)
         curr_item = "0" + curr_item;
       curr_item = "0x" + curr_item + ", ";
@@ -171,12 +174,9 @@ void rsc_create_files::write_hex_data(std::istream &is, std::ostream &os, bool t
     {  
       if(text)
       {  
-        sprintf(buf, "%s", "0x00, ");
+        curr_item = "0x00, ";
         size++;
       }  
-      else
-        sprintf(buf, "%s", "");
-      curr_item = buf;
     }  
 
     
