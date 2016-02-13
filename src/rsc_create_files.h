@@ -167,14 +167,17 @@ void rsc_create_files::write_hex_data(std::istream &is, std::ostream &os, bool t
       curr_item = ts.str();
       if(curr_item.size() == 1)
         curr_item = "0" + curr_item;
-      curr_item = "0x" + curr_item + ", ";
+      if( text )
+        curr_item = "'\\x" + curr_item + "', ";
+      else  
+        curr_item = "0x" + curr_item + ", ";
       size++;
     }  
     else
     {  
       if(text)
       {  
-        curr_item = "0x00, ";
+        curr_item = "'\\x00', ";
         size++;
       }  
     }  

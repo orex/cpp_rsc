@@ -18,5 +18,5 @@ if(Boost_UNIT_TEST_FRAMEWORK_FOUND)
   add_subdirectory(tests)
 endif()
 
-#add_subdirectory(cmake_test)
+add_subdirectory(cmake_test)
 
