@@ -15,6 +15,8 @@
 #include <algorithm>
 #include <map>
 
+#include <cctype>
+
 class rsc_create_files 
 {
 protected:
@@ -62,6 +64,9 @@ bool rsc_create_files::create_header()
 
   string hdr_define = rsfp->output_file_name + "_" + rsfp->suffix_header;
   
+  if( isdigit(hdr_define[0]) )
+    hdr_define = "_" + hdr_define;
+  
   transform(hdr_define.begin(), hdr_define.end(), hdr_define.begin(), ::toupper);
   
   for(int i = hdr_define.size() - 1; i >= 0; i--)
@@ -75,7 +80,7 @@ bool rsc_create_files::create_header()
     }  
   }  
   
-  write_title(f_out, "This file is header file");
+  write_title(f_out, "This is a header file");
   
   f_out << endl;
   
@@ -101,7 +106,7 @@ bool rsc_create_files::create_src()
   if(!f_out.is_open())  
     return false;
   
-  write_title(f_out, "This file is source file");
+  write_title(f_out, "This is a source file");
   
   f_out << "#include \"" << rsfp->output_file_name + "." + rsfp->suffix_header << "\"" << endl << endl;
   
