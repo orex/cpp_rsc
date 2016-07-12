@@ -15,8 +15,9 @@ function(find_resource_compiler)
   else() 
     set_property(GLOBAL PROPERTY CPPRSC_CMD cpp_rsc)
   endif()
-
-   
+  
+  message(STATUS "Resource compiler: " ${CPPRSC_CMD})
+  
 endfunction(find_resource_compiler)                        
 
 function(add_resource name)
