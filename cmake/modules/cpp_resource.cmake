@@ -16,7 +16,8 @@ function(find_resource_compiler)
     set_property(GLOBAL PROPERTY CPPRSC_CMD cpp_rsc)
   endif()
   
-  message(STATUS "Resource compiler: " ${CPPRSC_CMD})
+  get_property(CMDRSC GLOBAL PROPERTY CPPRSC_CMD)
+  message(STATUS "Resource compiler: " ${CMDRSC})
   
 endfunction(find_resource_compiler)                        
 
